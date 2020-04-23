@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     #my apps
     'testApp',
+    'pages',
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,8 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], # be sure to update the template direct
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
