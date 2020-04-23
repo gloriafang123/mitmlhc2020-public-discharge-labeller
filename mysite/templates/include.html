@@ -1,1 +1,18 @@
 <h1> text to include </h1>
+<!--see views.py for listitem-->
+<ul>
+{% for itemname in listitem %}
+
+{% if this_is_true == true %} <!--note to use lowercase true here-->
+<li> {{forloop.counter | add:100}} -- {{ itemname }} </li> 
+<!-- example adding-->
+<!-- built in template tag, "add".-->
+
+{% elif this_is_true == false %}
+<li> dummy text for elif </li>
+{% else %}
+<li> Dummy text rendered otherwise </li>
+{% endif %}
+
+{% endfor %} 
+</ul>
