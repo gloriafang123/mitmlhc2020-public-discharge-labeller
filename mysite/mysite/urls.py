@@ -16,7 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from pages.views import home_view
+from pages.views import other_view
+
 urlpatterns = [
 #    path('polls/', include('polls.urls')),
-#    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
+    path('',  home_view, name='home'),
+    path('other/',  other_view),
+
 ]
