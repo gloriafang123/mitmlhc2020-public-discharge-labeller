@@ -2,4 +2,9 @@
 
 {% block nameOfBlock %}
 Field: {{ object.field1 }}
+Updated.
+<form action='.' method='POST'> {% csrf_token %} <!--interesting: even comments like csrf get replaced by value. -->
+{{form.as_p}}
+<input type='submit' value='SaveSomething'/>
+</form>
 {% endblock nameOfBlock%}
