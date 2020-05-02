@@ -1,0 +1,31 @@
+
+
+<!doctype html>
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+
+<html>
+<head>
+	<title> LabelLite </title>
+</head>
+<body>
+
+Label Discharge Summary
+
+ 
+
+<form action='.' method='POST'> {% csrf_token %} 
+{{form.as_p}}
+
+
+<input type='submit' value='Get Labels'/>
+</form>
+<p>
+Output:
+<!-- there is a lot of text here. why doesn't it render, because of comments.
+ --></p>
+{{processed_text | safe}}
+
+</body>
+</html>

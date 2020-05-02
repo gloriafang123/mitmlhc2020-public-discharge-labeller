@@ -18,6 +18,8 @@ from django.urls import include, path
 
 from pages.views import home_view, other_view
 from testApp.views import test_app_view
+from highlighter.views import highlighter_view
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
 #    path('polls/', include('polls.urls')),
@@ -25,5 +27,7 @@ urlpatterns = [
     path('',  home_view, name='home'),
     path('other/',  other_view),
     path('test_app/', test_app_view),
+    path('highlighter/', highlighter_view),
+    *staticfiles_urlpatterns(),
 
 ]

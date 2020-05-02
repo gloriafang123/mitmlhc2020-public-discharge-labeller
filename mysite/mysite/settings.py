@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     #my apps
     'testApp',
     'pages',
+    'highlighter',
 ]
 
 MIDDLEWARE = [
@@ -59,7 +60,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         
-        'DIRS': [os.path.join(BASE_DIR, 'templates')], # be sure to update the template direct
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),
+        os.path.join(BASE_DIR, 'higlighter/templates'),
+                ], # be sure to update the template direct
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,3 +126,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# i'm adding this
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "highlighter/static"),
+    os.path.join(BASE_DIR, "static/"),
+
+]
