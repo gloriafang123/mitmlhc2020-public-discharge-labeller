@@ -1,3 +1,40 @@
+:root {
+  --font-color: rgb(214, 25, 127);
+  /*--background-color: rgb();*/
+  --highlight1: violet;
+  /*rgb(204,204,255);*/
+}
+
+h1 {
+	font: 2em "Arial";
+}
+
 body {
     background: aliceblue;
+    font: 1.2em "Arial";
+    color: var(--font-color);
 }
+
+input, textarea{
+	font-size: 1em;
+	border-radius: 1em;
+	border-color: aliceblue; 
+}
+
+.label{
+    /* display: inline-block; */
+    border-radius: 0.5em;
+    padding: 0 0.1rem 0rem;
+    background: var(--highlight1);
+    color: beige;
+    display: inline-block;
+}
+/*
+labels:
+"Other","Movement","Meds_Treatments","Procedures_Results",
+            "Vitals_Labs","Symptoms_Signs", "ProcedureHistory","MedicationHistory",
+            "DiagnosisHistory","Demographics"*/
+
+/*Need to refresh to see css*/
+
+/*class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"*/

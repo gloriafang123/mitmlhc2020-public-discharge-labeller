@@ -39,9 +39,7 @@ def highlighter_view(r, *args, **kwargs):
 	################################################
 
 	#vars: cleaned_data, labels
-	cleaned_data = {}
-	labels = []
-	s = None
+	processed_text = "default text"
 	form = SummaryForm()
 	if r.method == "POST":
 		form = SummaryForm(r.POST)
@@ -50,6 +48,9 @@ def highlighter_view(r, *args, **kwargs):
 			labels = cleaned_data.pop('labels')
 			s = SummaryEntry.objects.create(**cleaned_data)
 			s.labels.set(labels)
+			processed_text = backend.get_summary(cleaned_data, labels)
+			s.processed = processed_text
+			s.save() #this step is key!!! :) saves it!
 
 		else:
 			form = SummaryForm()
@@ -58,10 +59,6 @@ def highlighter_view(r, *args, **kwargs):
 		print("not a POST method")
 
 	#process here
-	processed_text = backend.get_summary(cleaned_data, labels)
-	if s is not None:
-		print("value of s", s)
-		s.processed =processed_text
 
 	context={
 		#'object': obj, # so that we don't have to map out everything, when keys change
