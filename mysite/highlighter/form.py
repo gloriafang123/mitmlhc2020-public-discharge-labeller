@@ -18,13 +18,14 @@ class SummaryForm(ModelForm):
 	original = forms.CharField(label = "",  #label affects its rendering
 		widget = forms.Textarea(attrs={
 			"placeholder":"Insert discharge summary here",
-			"class": "summary-form-class",
+			"class": "summary-form-class materialize-textarea",
 			}
 			))
 	labels = forms.ModelMultipleChoiceField(
 		label="Select all relevant labels",
 		queryset=LabelType.objects.all(),
 		widget = forms.CheckboxSelectMultiple,
+		required=False,
 		)
 	#,	empty_label = "(Select all relevant labels)",)#,  #label affects its rendering
 		#widget = forms.SelectMultiple, 

@@ -16,7 +16,7 @@ def test_app_view(r, *args, **kwargs):
 		print("post!!!")
 		form = MyForm(r.POST)
 		if form.is_valid():
-			print("cleaned form", form.cleaned_data)
+			print("cleaned form", form.cleanepyd_data)
 			TestApp.objects.create(field1=form.cleaned_data.get('title'))
 		else:
 			print("errors in form", form.errors)

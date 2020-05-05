@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'testApp',
     'pages',
     'highlighter',
+    'materializeform',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +72,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            # 'libraries':{
+            # 'materialform': 'highlighter.templatetags.materialize',
+
+            # }
         },
     },
 ]

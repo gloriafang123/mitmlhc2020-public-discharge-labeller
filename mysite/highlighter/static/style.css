@@ -5,7 +5,7 @@
   /*rgb(204,204,255);*/
 }
 
-h1 {
+/*h1 {
 	font: 2em "Arial";
 }
 
@@ -19,8 +19,10 @@ input, textarea{
 	font-size: 1em;
 	border-radius: 1em;
 	border-color: aliceblue; 
+}*/
+body{
+	background: black;
 }
-
 .label{
     /* display: inline-block; */
     border-radius: 0.5em;

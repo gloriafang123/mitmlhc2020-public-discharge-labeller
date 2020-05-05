@@ -39,20 +39,23 @@ def highlighter_view(r, *args, **kwargs):
 	################################################
 
 	#vars: cleaned_data, labels
-	processed_text = "default text"
+	processed_text = "(Enter summary to see labels.)"
 	form = SummaryForm()
 	if r.method == "POST":
 		form = SummaryForm(r.POST)
 		if form.is_valid():
 			cleaned_data = form.cleaned_data
+			print(cleaned_data)
 			labels = cleaned_data.pop('labels')
 			s = SummaryEntry.objects.create(**cleaned_data)
 			s.labels.set(labels)
+			print("labels", s.labels)
 			processed_text = backend.get_summary(cleaned_data, labels)
 			s.processed = processed_text
 			s.save() #this step is key!!! :) saves it!
 
 		else:
+			print ("post", r.POST, form.is_valid())
 			form = SummaryForm()
 			print("errors in form", form.errors)
 	else:
