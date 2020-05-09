@@ -8,6 +8,15 @@ import h5py
 from mysite.settings import BASE_DIR
 import os
 
+#################################
+import spacy
+import scispacy
+import en_core_sci_sm   #The model we are going to use
+from spacy import displacy
+from scispacy.abbreviation import AbbreviationDetector
+from scispacy.umls_linking import UmlsEntityLinker
+import urllib
+
 ####load model and vectors ####
 
 model = tf.keras.models.load_model(
@@ -92,3 +101,53 @@ def get_label_list(input_summary, max_length=max_length):
 	predicted_labels = np.array([vec_label(i) for i in new_preds[0]])
 
 	return predicted_labels
+
+
+
+
+# nlp_reader is pickled bc it takes forever
+
+nlp_reader = en_core_sci_sm.load()
+cui_linker = UmlsEntityLinker(resolve_abbreviations=True)
+nlp_reader.add_pipe(cui_linker)
+
+
+def get_summary_scispacy(input_summary, *args):
+	tagged_sent = nlp_reader(input_summary["original"])
+	# BAD_STRING = """<span style="font-size: 0.8em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem">ENTITY</span>\n</mark>\n"""
+	
+	#replace all BAD_Strings with a link
+	# tagged_sent.replace(BAD_STRING, "")
+
+	#find all mark tags, add class tooltipped, and add cui code
+	# tooltipped" data-position="bottom" data-tooltip="I am a tooltip"
+
+	#or we could deconstruct the output, reconstruct it. want to add tooltip showing cui
+
+	# sent.ents[0]._.umls_ents[0]
+	sentence_html = displacy.render(tagged_sent, style="ent")
+	sentence_ents = tagged_sent.ents
+	output_html = fix_html(sentence_html, sentence_ents)
+
+	return output_html
+
+def fix_html(sentence_html, sentence_ents):
+  words = sentence_html.split("<mark")
+  print (len(words))
+  output = [words[0]] #first term doesn't have "mark" on it
+  for i in range(1, len(words)):
+    # print(words[i])
+    # print(sentence_ents[i-1])
+    try:
+    	cui = sentence_ents[i-1]._.umls_ents[0][0] #if no cui, this will be out of range
+    except:
+    	cui = "SEARCH"
+    # print(cui)
+    replaced = words[i].replace('class="entity"', 'class="entity tooltipped" data-position="top" data-tooltip="' +  str(cui) +
+                     '"')
+    replaced = replaced.replace('<span style="font-size: 0.8em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem">ENTITY</span>',
+                                '<a href="http://www.google.com/search?q=' +urllib.parse.quote_plus(str(sentence_ents[i-1])) + '">'+ str(cui)+' </a>')
+    output.append(replaced)
+    # print(replaced)
+  # print('<mark'.join(output))
+  return '<mark'.join(output)

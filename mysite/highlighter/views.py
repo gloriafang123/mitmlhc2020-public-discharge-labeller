@@ -50,7 +50,7 @@ def highlighter_view(r, *args, **kwargs):
 			s = SummaryEntry.objects.create(**cleaned_data)
 			s.labels.set(labels)
 			print("labels", s.labels)
-			processed_text = backend.get_summary(cleaned_data, labels)
+			processed_text = backend.get_summary_scispacy(cleaned_data, labels)
 			s.processed = processed_text
 			s.save() #this step is key!!! :) saves it!
 
