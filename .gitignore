@@ -1,2 +1,2 @@
 word_embeddings.pickle
-db.sqlite3
+*.sqlite3
