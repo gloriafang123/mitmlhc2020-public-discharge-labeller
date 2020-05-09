@@ -40,11 +40,10 @@
 <div class="container">
 <form action='.' method='post' >
     {% csrf_token %}
-
     {{form.title}}
     {{form.original}} 
 
-    <!-- {{ form.original|materialize}} -->
+    <!-- {{ form|materialize}} -->
     <!-- 
     {{form.labels}} -->
    <!--  {% for field in form.labels %}
