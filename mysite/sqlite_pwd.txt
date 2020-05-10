@@ -1,0 +1,4 @@
+Password for the admin database:
+
+superuser: gloria
+pwd: gloria

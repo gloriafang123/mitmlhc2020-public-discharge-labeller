@@ -3,11 +3,13 @@ from django import forms
 from highlighter.models import SummaryEntry, LabelType
 
 
+# labels are deprecated; need update this and the model too
 LABELS = [
 ("label1", "Label1"),
 ("label2", "Label2"),
 ("label3", "Label3"),
 ]
+
 class SummaryForm(ModelForm):
 	title = forms.CharField(label = "",  #label affects its rendering
 		widget = forms.TextInput(attrs={
@@ -27,9 +29,6 @@ class SummaryForm(ModelForm):
 		widget = forms.CheckboxSelectMultiple,
 		required=False,
 		)
-	#,	empty_label = "(Select all relevant labels)",)#,  #label affects its rendering
-		#widget = forms.SelectMultiple, 
-		#choices = LABELS)
 
 	class Meta:
 		model = SummaryEntry

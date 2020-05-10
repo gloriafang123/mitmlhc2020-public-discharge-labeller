@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #my apps
-    'testApp',
-    'pages',
     'highlighter',
     'materializeform',
 ]
@@ -72,10 +70,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            # 'libraries':{
-            # 'materialform': 'highlighter.templatetags.materialize',
-
-            # }
         },
     },
 ]
