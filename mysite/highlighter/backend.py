@@ -1,5 +1,3 @@
-import random 
-
 import tensorflow as tf
 import numpy as np
 import re
@@ -8,7 +6,9 @@ import h5py
 from mysite.settings import BASE_DIR
 import os
 
-#################################
+########## scispacy imports #############
+# make sure you have pip installed scispacy
+
 import spacy
 import scispacy
 import en_core_sci_sm   #The model we are going to use
@@ -17,7 +17,12 @@ from scispacy.abbreviation import AbbreviationDetector
 from scispacy.umls_linking import UmlsEntityLinker
 import urllib
 
+
+#### get_summary(): used if using ML model #######
+
 ####load model and vectors ####
+# make sure you have word_embeddings (e.g. glove or other) 
+# pickled at the correct location.
 
 model = tf.keras.models.load_model(
 	os.path.join(BASE_DIR, 'highlighter/load/models/model1')
@@ -36,7 +41,6 @@ max_length = 206 #current shape model is trained on, needs changing later
 
 ################################
 
-
 def get_summary(original_string_cleaned_data, labels):
 	"""
 	returns an html_string of the highlighted summary
@@ -54,17 +58,24 @@ def get_summary(original_string_cleaned_data, labels):
 
 	html_string = "" 
 	#zip takes shorter list.
+
+	# NOTE for now all labels are in the class 'label'.
+	# ideally, we need several cases to deal with each of the 10 HPI labels
+	# and also add 10 classes to the styles.css file.
 	for word,label in zip(original_summary_separated, output_labels):
 		if label != "Other":
 			html_string += "<div class='label'>" + word + "</div> "
 		else:
 			html_string += word + " "
 
-	return  html_string + str(random.randint(0,10))
+	return  html_string
 	# "Example Trained <div class='label'> String </div> Here "
 
 
 def vec_label(vec):
+	"""
+	finds the corresponding label for a vector
+	"""
 	idx = np.argmax(vec)
 	labels = ["Other","Movement","Meds_Treatments","Procedures_Results",
 		"Vitals_Labs","Symptoms_Signs", "ProcedureHistory","MedicationHistory",
@@ -73,6 +84,9 @@ def vec_label(vec):
 
 
 def get_words_from_text(text, max_length=206):
+	"""
+	get vectorized word embeddings based on input string text
+	"""
   # max length: pad or cut off
 	text = re.sub("[^a-zA-Z0-9.]", " ", text)
 	tokens = text.lower().strip().split()
@@ -104,8 +118,8 @@ def get_label_list(input_summary, max_length=max_length):
 
 
 
-
-# nlp_reader is pickled bc it takes forever
+######## Code below is used if using get_summary_scispacy() #########
+# nlp_reader takes forever to load. unfortunately cannot be pickled.
 
 nlp_reader = en_core_sci_sm.load()
 cui_linker = UmlsEntityLinker(resolve_abbreviations=True)
@@ -114,17 +128,6 @@ nlp_reader.add_pipe(cui_linker)
 
 def get_summary_scispacy(input_summary, *args):
 	tagged_sent = nlp_reader(input_summary["original"])
-	# BAD_STRING = """<span style="font-size: 0.8em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem">ENTITY</span>\n</mark>\n"""
-	
-	#replace all BAD_Strings with a link
-	# tagged_sent.replace(BAD_STRING, "")
-
-	#find all mark tags, add class tooltipped, and add cui code
-	# tooltipped" data-position="bottom" data-tooltip="I am a tooltip"
-
-	#or we could deconstruct the output, reconstruct it. want to add tooltip showing cui
-
-	# sent.ents[0]._.umls_ents[0]
 	sentence_html = displacy.render(tagged_sent, style="ent")
 	sentence_ents = tagged_sent.ents
 	output_html = fix_html(sentence_html, sentence_ents)
@@ -132,22 +135,27 @@ def get_summary_scispacy(input_summary, *args):
 	return output_html
 
 def fix_html(sentence_html, sentence_ents):
-  words = sentence_html.split("<mark")
-  print (len(words))
-  output = [words[0]] #first term doesn't have "mark" on it
-  for i in range(1, len(words)):
-    # print(words[i])
-    # print(sentence_ents[i-1])
-    try:
-    	cui = sentence_ents[i-1]._.umls_ents[0][0] #if no cui, this will be out of range
-    except:
-    	cui = "SEARCH"
-    # print(cui)
-    replaced = words[i].replace('class="entity"', 'class="entity tooltipped" data-position="top" data-tooltip="' +  str(cui) +
+	"""
+	updates the html text:
+	instead of ENTITY, use a CUI that is a (google) search link 
+	(could update link later)
+
+	input: sentence_html that is already tagged; sentence_ents is list of entities.
+	"""
+	words = sentence_html.split("<mark")
+	print (len(words))
+	output = [words[0]] #first term doesn't have "mark" on it
+	for i in range(1, len(words)):
+
+		try:
+			cui = sentence_ents[i-1]._.umls_ents[0][0] #if no cui, this will be out of range
+		except:
+			cui = "SEARCH"
+		replaced = words[i].replace('class="entity"', 'class="entity tooltipped" data-position="top" data-tooltip="' +  str(cui) +
                      '"')
-    replaced = replaced.replace('<span style="font-size: 0.8em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem">ENTITY</span>',
+
+		#note: currently tooltips don't work.
+		replaced = replaced.replace('<span style="font-size: 0.8em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem">ENTITY</span>',
                                 '<a href="http://www.google.com/search?q=' +urllib.parse.quote_plus(str(sentence_ents[i-1])) + '">'+ str(cui)+' </a>')
-    output.append(replaced)
-    # print(replaced)
-  # print('<mark'.join(output))
-  return '<mark'.join(output)
+		output.append(replaced)
+	return '<mark'.join(output)
