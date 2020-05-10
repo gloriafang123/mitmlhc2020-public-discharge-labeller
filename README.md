@@ -9,3 +9,6 @@
 4. use adminDB link to navigate the labelled summaries you've saved.
 CAUTION: if pushing to a public git repo, be sure to DELETE your database (or .gitignore it), otherwise the discharge summaries will be publicly visible. (Name of the current database is db.sqlite3).
 Also, may want to add your own superuser with username and password for admin db management.
+
+# Notes
+demo using scispacy (update to model later)
