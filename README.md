@@ -1,4 +1,4 @@
-# django_learning_2
+# Discharge Labeller Web UI
 
 1. Install Django (pip install django), using python 3.
 2. Pickle your own word embeddings (a dictionary mapping word to vector) in the folder highlighter/load. This file is usually large and cannot be pushed to git.
