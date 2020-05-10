@@ -1,5 +1,5 @@
 # Public Repo for HST Final project
-@Team: be sure not to push ANY sensitive passwords/ data here, at any point in time! Note, commit history will still be public too (see Piazza post).
+**@Team: be sure not to push ANY sensitive passwords/ data here, at any point in time! Note, commit history will still be public too (see Piazza post).**
 
 # Discharge Labeller Web UI
 
