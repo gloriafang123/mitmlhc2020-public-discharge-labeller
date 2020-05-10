@@ -11,4 +11,4 @@ CAUTION: if pushing to a public git repo, be sure to DELETE your database (or .g
 Also, may want to add your own superuser with username and password for admin db management.
 
 # Notes
-demo using scispacy (update to model later)
+demo using scispacy (update to model later) (ideally CTakes better, SciSpaCy has some issues)
