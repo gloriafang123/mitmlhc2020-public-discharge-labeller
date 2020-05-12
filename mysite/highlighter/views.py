@@ -14,6 +14,7 @@ def highlighter_view(r, *args, **kwargs):
 
 	#vars: cleaned_data, labels
 	processed_text = "(Enter summary to see labels.)"
+	definition_html = "(Enter summary to see definitions.)"
 	form = SummaryForm()
 	if r.method == "POST":
 		form = SummaryForm(r.POST)
@@ -24,7 +25,7 @@ def highlighter_view(r, *args, **kwargs):
 			s.labels.set(labels)
 
 			# if using ML model, use backend.get_summary() function instead.
-			processed_text = backend.get_summary_scispacy(cleaned_data, labels)
+			processed_text, definition_html = backend.get_summary_scispacy(cleaned_data, labels)
 			s.processed = processed_text
 			s.save() #this step is key!!! :) saves it!
 
@@ -38,6 +39,7 @@ def highlighter_view(r, *args, **kwargs):
 	context={
 		'form':form,
 		'processed_text': processed_text,
+		'definitions': definition_html,
 	}
 	return render(r, 'highlighter_temp.html', context)
 	# this is still relative to templates directory!!

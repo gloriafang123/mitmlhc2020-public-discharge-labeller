@@ -17,6 +17,7 @@ from scispacy.abbreviation import AbbreviationDetector
 from scispacy.umls_linking import UmlsEntityLinker
 import urllib
 
+from highlighter.definition_function import get_definitions
 
 #### get_summary(): used if using ML model #######
 
@@ -132,7 +133,18 @@ def get_summary_scispacy(input_summary, *args):
 	sentence_ents = tagged_sent.ents
 	output_html = fix_html(sentence_html, sentence_ents)
 
-	return output_html
+	definitions = get_definitions(input_summary["original"])
+	definitions_html = dict_to_html(definitions)
+	return output_html, definitions_html
+
+def dict_to_html(d):
+	output = ""
+	for word in d:
+		defs = "<br>".join(d[word])
+		output += "<br> <b>" + word + ":</b> <br> " + defs
+	print(output)
+	return output
+
 
 def fix_html(sentence_html, sentence_ents):
 	"""
